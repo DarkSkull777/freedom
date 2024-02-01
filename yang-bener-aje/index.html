@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="rugi dong - page that provides free TikTok views to all users with a maximum view of 10.000">
+    <meta name="keywords" content="smm panel, tiktok view, situs smm, view gratis, smm panel gratis">
+    <meta name="author" content="Dymles">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Dymles Ganz - Free Tiktok Views">
+    <meta property="og:description" content="rugi dong - page that provides free TikTok views to all users with a maximum view of 10.000">
+    <meta property="og:image" content="https://raw.githubusercontent.com/DarkSkull777/freedom/main/images/ecx.png">
+    <meta name="twitter:title" content="Dymles Ganz - Free Tiktok Views">
+    <meta name="twitter:description" content="rugi dong - page that provides free TikTok views to all users with a maximum view of 10.000">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/DarkSkull777/freedom/main/images/ecx.png">
+    <title>Dymles Ganz - Free Tiktok Views</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #panel {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div id="panel">
+    <h1>SMM Panel</h1>
+    <button onclick="displayProfile()">Profile</button>
+    <button onclick="displayServices()">Services</button>
+    <button onclick="placeOrder()">Place Order</button>
+    <div id="output"></div>
+</div>
+
+<script>
+    const API_URL = "https://danapedia.id/api/";
+    const API_ID = "K2ZzdGUvaUVPTCswTXV0dGN6aWYxQT09";
+    const API_KEY = "4afebf-b75b9e-7172d3-93fb5b-f55677";
+
+    function callApi(endpoint, params) {
+        params.api_id = API_ID;
+        params.api_key = API_KEY;
+
+        return fetch(API_URL + endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(params)
+        }).then(response => response.json());
+    }
+
+    function displayProfile() {
+        callApi("profile", {})
+            .then(response => {
+                if (response.status) {
+                    document.getElementById("output").innerHTML = `
+                        <p>Username: ${response.data.username}</p>
+                        <p>Full Name: ${response.data.full_name}</p>
+                        <p>Balance: ${response.data.balance}</p>
+                    `;
+                } else {
+                    document.getElementById("output").innerHTML = `<p>${response.data}</p>`;
+                }
+            });
+    }
+
+    function displayServices() {
+        callApi("services", {})
+            .then(response => {
+                if (response.status) {
+                    const servicesList = response.data.map(service => `
+                        <p>ID: ${service.id}</p>
+                        <p>Category: ${service.category}</p>
+                        <p>Name: ${service.name}</p>
+                        <p>Price: ${service.price}</p>
+                        <p>Min: ${service.min}</p>
+                        <p>Max: ${service.max}</p>
+                        <p>Description: ${service.description}</p>
+                        <p>Status: ${service.status === "1" ? "On" : "Off"}</p>
+                        <hr>
+                    `).join("");
+
+                    document.getElementById("output").innerHTML = servicesList;
+                } else {
+                    document.getElementById("output").innerHTML = `<p>${response.data}</p>`;
+                }
+            });
+    }
+
+    function placeOrder() {
+        const serviceId = prompt("Enter service ID:");
+        const target = prompt("Enter target:");
+        const quantity = prompt("Enter quantity:");
+        const customComments = prompt("Enter custom comments (optional):");
+        const customLink = prompt("Enter custom link (optional):");
+
+        const orderParams = {
+            service: serviceId,
+            target,
+            quantity,
+            custom_comments: customComments,
+            custom_link: customLink
+        };
+
+        callApi("order", orderParams)
+            .then(response => {
+                if (response.status) {
+                    document.getElementById("output").innerHTML = `
+                        <p>Order ID: ${response.data.id}</p>
+                        <p>Price: ${response.data.price}</p>
+                    `;
+                } else {
+                    document.getElementById("output").innerHTML = `<p>${response.data}</p>`;
+                }
+            });
+    }
+</script>
+
+</body>
+</html>
